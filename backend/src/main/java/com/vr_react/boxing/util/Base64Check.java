@@ -2,8 +2,6 @@ package com.vr_react.boxing.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Component;
 
 @Component

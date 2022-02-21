@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vr_react.boxing.dto.LoginDTO;
@@ -29,30 +28,29 @@ public class AdminController {
 	@Autowired
 	private Base64Check base64Check;
 	
-	Logger logger = LogManager.getLogger(SignupController.class);
+	Logger logger = LogManager.getLogger(AdminController.class);
 	
 	@PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String signup(@RequestBody String userString) {
 		
-		logger.info("signup method start");
+		logger.info("signup admin method start");
 		
 		JSONObject jsonObject = new JSONObject(userString);
 		
 		String email = jsonObject.getString("email");
 		String password = jsonObject.getString("password");
 		String moblieNumber = jsonObject.getString("moblieNumber");
-		String sAdmin = new String();
-		
-			sAdmin = "ADMIN";
+		String sAdmin = "ADMIN";
 		
 		
-		String userName = userUtil.createId(); 
+		String userName = userUtil.createId()+"A";
 		
 		int temp = 0;
 
 		//checking with null and empty
 		if ((email == null || email.isEmpty())
-				|| (email == null || email.isEmpty())) {
+				|| (password == null || password.isEmpty())
+				|| (moblieNumber == null || moblieNumber.isEmpty())) {
 			return "You are Entering Null values";
 		}
 
@@ -78,7 +76,7 @@ public class AdminController {
 			//if any error occurs
 			return e.getMessage();
 		}
-		logger.info("signup method end");
+		logger.info("signup admin method end");
 		return (temp == 1) ? "true" : "false";
 
 	}
@@ -86,8 +84,8 @@ public class AdminController {
 	@PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String login(@RequestBody LoginDTO loginDTO) {
 
-		logger.info("signup method start");
-		int temp = 0;
+		logger.info("login admin method start");
+		
 
 		// checking with null and empty
 		if ((loginDTO.getEmail() == null || loginDTO.getEmail().isEmpty())
@@ -107,7 +105,6 @@ public class AdminController {
 		Integer isLogin = 0;
 
 		try {
-//		jdbcTemplate.query(query, new MapSqlParameterSource().addValue("email", loginDTO.getEmail()).addValue("password", loginDTO.getPassword()));
 			isLogin = jdbcTemplate.queryForObject(query, new Object[] { loginDTO.getEmail(), loginDTO.getPassword() },
 					Integer.class);
 		} catch (Exception e) {
@@ -116,31 +113,35 @@ public class AdminController {
 			return e.getMessage();
 		}
 
+		logger.info("login admin method end");
+		
 		return (isLogin == 1) ? "true" : "false";
 	}
 
 	
 	@PostMapping(value = "/delete")
 	public String delete(@RequestBody String jsonUser) {
+		logger.info("delete admin method start");
 		JSONObject jsonObject = new JSONObject(jsonUser);
 		String email = jsonObject.getString("email");
 		
 		int temp = 0;
 		try {
-			String query = "delete user where email = ? where user_role= 'NONADMIN'";
+			String query = "delete user where email = ? and user_role= 'NONADMIN'";
 			temp = jdbcTemplate.update(query,email);
 		}catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
 			return e.getMessage();
 		}
+		logger.info("delete admin method end");
 		return (temp == 1)? "true": "false";
 	}
 	
 	@PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String edit(@RequestBody String userString) {
 		
-		logger.info("edit method start");
+		logger.info("edit admin method start");
 		
 		JSONObject jsonObject = new JSONObject(userString);
 		
@@ -148,7 +149,7 @@ public class AdminController {
 		String password = jsonObject.optString("password");
 		String moblieNumber = jsonObject.optString("moblieNumber");
 		Integer userRole = jsonObject.optInt("userRole");
-		String change = jsonObject.optString("change");
+		String change = jsonObject.getString("change");
 		String sUserRole = null;
 		if(userRole != null && userRole == 0) {
 			sUserRole = "NONADMIN";
@@ -196,7 +197,7 @@ public class AdminController {
 			//if any error occurs
 			return e.getMessage();
 		}
-		logger.info("signup method end");
+		logger.info("edit admin method end");
 		return (temp == 1) ? "true" : "false";
 
 	}
