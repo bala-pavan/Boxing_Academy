@@ -31,7 +31,7 @@ public class UserController {
 	@Autowired
 	private Base64Check base64Check;
 	
-	Logger logger = LogManager.getLogger(SignupController.class);
+	Logger logger = LogManager.getLogger(UserController.class);
 	
 	@PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String signup(@RequestBody String userString) {
