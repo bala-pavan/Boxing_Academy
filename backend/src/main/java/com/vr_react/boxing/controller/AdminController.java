@@ -1,5 +1,7 @@
 package com.vr_react.boxing.controller;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vr_react.boxing.dto.LoginDTO;
+import com.vr_react.boxing.dto.UserDTO;
+import com.vr_react.boxing.mapper.UserMapper;
 import com.vr_react.boxing.util.Base64Check;
 import com.vr_react.boxing.util.UserUtil;
 
@@ -189,6 +193,10 @@ public class AdminController {
 				query = "update user set user_role = ? where email = ?";
 				temp = jdbcTemplate.update(query, sUserRole, email);
 			}
+			else if(change.equals("all")) {
+				query = "update user set password = ?, moblie_number = ? where email = ?";
+				temp = jdbcTemplate.update(query, password, moblieNumber, email);
+			}
 			
 			//if update in sql temp will be 1
 			
@@ -200,5 +208,36 @@ public class AdminController {
 		logger.info("edit admin method end");
 		return (temp == 1) ? "true" : "false";
 
+	}
+	@PostMapping(value = "/display")
+	public List<UserDTO> display() {
+		
+		String query = "select * from user";
+		List<UserDTO> userDTOs = null;
+		try {
+			 userDTOs = jdbcTemplate.query(query, new UserMapper());
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return userDTOs;
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	@PostMapping(value = "/singleDisplay")
+	public List<UserDTO> singledisplay(@RequestBody String jsonBody) {
+		
+		String query = "select * from user where email=? and user_role = 'ADMIN' limit 1";
+		List<UserDTO> userDTOs = null;
+		try {
+			 JSONObject jsonObject=new JSONObject(jsonBody);
+
+			userDTOs = jdbcTemplate.query(query, new String[] { jsonObject.getString("email") },new UserMapper());
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return userDTOs;
 	}
 }

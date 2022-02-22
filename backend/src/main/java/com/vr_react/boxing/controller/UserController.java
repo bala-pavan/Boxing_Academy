@@ -1,5 +1,7 @@
 package com.vr_react.boxing.controller;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vr_react.boxing.dto.LoginDTO;
+import com.vr_react.boxing.dto.UserDTO;
+import com.vr_react.boxing.mapper.UserMapper;
 import com.vr_react.boxing.util.Base64Check;
 import com.vr_react.boxing.util.UserUtil;
 
@@ -36,15 +40,14 @@ public class UserController {
 	@PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String signup(@RequestBody String userString) {
 		
-		logger.info("signup method start");
+		logger.info("signupuser  method start");
 		
 		JSONObject jsonObject = new JSONObject(userString);
 		
 		String email = jsonObject.getString("email");
 		String password = jsonObject.getString("password");
 		String moblieNumber = jsonObject.getString("moblieNumber");
-		String sAdmin = new String();
-			sAdmin = "NONADMIN";
+		String sAdmin =  "NONADMIN";
 		
 		
 		String userName = userUtil.createId(); 
@@ -152,17 +155,21 @@ public class UserController {
 			//converting into base64
 			password = base64Check.encodeBase64(password);
 		}
-		String query = new String();
+		String query = null;
 		
 		
 		try {
 			
 			if(change.equals("password")) {
-				query = "update user set password = ? where email = ?";
+				query = "update user set password = ? where email = ? and user_role = 'NONADMIN'";
 				temp = jdbcTemplate.update(query, password, email);
 			}else if (change.equals("moblieNumber")) {
-				query = "update user set moblie_number = ? where email = ?";
+				query = "update user set moblie_number = ? where email = ? and user_role = 'NONADMIN'";
 				temp = jdbcTemplate.update(query, moblieNumber, email);
+			}
+			else if(change.equals("all")) {
+				query = "update user set password = ?, moblie_number = ? where email = ? and user_role = 'NONADMIN'";
+				temp = jdbcTemplate.update(query, password, moblieNumber, email);
 			}
 			//if update in sql temp will be 1
 			
@@ -174,6 +181,23 @@ public class UserController {
 		logger.info("signup method end");
 		return (temp == 1) ? "true" : "false";
 
+	}
+	
+	@SuppressWarnings("deprecation")
+	@PostMapping(value = "/display")
+	public List<UserDTO> display(@RequestBody String jsonBody) {
+		
+		String query = "select * from user where email=? and user_role = 'NONADMIN' limit 1";
+		List<UserDTO> userDTOs = null;
+		try {
+			 JSONObject jsonObject=new JSONObject(jsonBody);
+
+			userDTOs = jdbcTemplate.query(query, new String[] { jsonObject.getString("email") },new UserMapper());
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return userDTOs;
 	}
 	
 }
