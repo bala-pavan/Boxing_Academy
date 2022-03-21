@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import com.vr_react.boxing.dto.UserDTO;
 import com.vr_react.boxing.mapper.UserMapper;
 import com.vr_react.boxing.util.Base64Check;
 import com.vr_react.boxing.util.UserUtil;
-
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/user" )
 public class UserController {
@@ -45,7 +46,8 @@ public class UserController {
 		JSONObject jsonObject = new JSONObject(userString);
 		
 		String email = jsonObject.getString("email");
-		String password = jsonObject.getString("password");
+		String password = jsonObject.getString("password").trim();
+		String confirmPassword=jsonObject.getString("confirmPassword").trim();
 		String moblieNumber = jsonObject.getString("moblieNumber");
 		String sAdmin =  "NONADMIN";
 		
@@ -59,10 +61,18 @@ public class UserController {
 				|| (email == null || email.isEmpty())) {
 			return "You are Entering Null values";
 		}
+		
+		if(moblieNumber.length() != 10) {
+			return "Moblie number have to be 10 digits";
+		}
 
 		//checking with email is proper or not
 		if (!userUtil.isProperEmail(email)) {
 			return "check with email";
+		}
+		if (password!=confirmPassword)
+		{
+			return "Password mismatch";
 		}
 		
 		//checking if string is base64 or not
