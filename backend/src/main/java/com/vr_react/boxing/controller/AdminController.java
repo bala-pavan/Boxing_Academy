@@ -53,7 +53,7 @@ public class AdminController {
 		String email = jsonObject.getString("email");
 		String password = jsonObject.getString("password").trim();
 		String confirmPassword = jsonObject.getString("confirmPassword").trim();
-		String moblieNumber = jsonObject.getString("moblieNumber");
+		String moblieNumber = jsonObject.getString("mobileNumber");
 		String sAdmin = "ADMIN";
 
 		String userName = userUtil.createId() + "A";
@@ -93,7 +93,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 		logger.info("signup admin method end");
 		return (temp == 1) ? "true" : "false";
@@ -126,7 +126,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 
 		logger.info("login admin method end");
@@ -147,7 +147,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 		logger.info("delete admin method end");
 		return (temp == 1) ? "true" : "false";
@@ -211,7 +211,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 		logger.info("edit admin method end");
 		return (temp == 1) ? "true" : "false";
@@ -269,7 +269,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 
 		logger.info("add course method end");
@@ -312,7 +312,7 @@ public class AdminController {
 	} catch (Exception e) {
 		logger.error(e.getMessage());
 		// if any error occurs
-		return e.getMessage();
+		return "false";
 	}
 	logger.info("edit course admin method end");
 	return (temp == 1) ? "true" : "false";
@@ -333,7 +333,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 		logger.info("delete course method end");
 		return (temp == 1) ? "true" : "false";
@@ -374,7 +374,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 
 		logger.info("add institute method end");
@@ -425,7 +425,7 @@ public class AdminController {
 	} catch (Exception e) {
 		logger.error(e.getMessage());
 		// if any error occurs
-		return e.getMessage();
+		return "false";
 	}
 	logger.info("edit course admin method end");
 	return (temp == 1) ? "true" : "false";
@@ -446,7 +446,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 		logger.info("delete institute method end");
 		return (temp == 1) ? "true" : "false";
@@ -487,7 +487,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 
 		logger.info("add institute method end");
@@ -535,7 +535,7 @@ public class AdminController {
 	} catch (Exception e) {
 		logger.error(e.getMessage());
 		// if any error occurs
-		return e.getMessage();
+		return "false";
 	}
 	logger.info("edit course admin method end");
 	return (temp == 1) ? "true" : "false";
@@ -556,7 +556,7 @@ public class AdminController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 		logger.info("delete student method end");
 		return (temp == 1) ? "true" : "false";

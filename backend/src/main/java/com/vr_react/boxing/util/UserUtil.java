@@ -21,6 +21,7 @@ public class UserUtil {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yy");
 		return "ID"+dateFormat.format(new Date())+generateUserName();
 	}
+	
 	public String generateUserName() {
 		int leftLimit = 48; // numeral '0'
 	    int rightLimit = 122; // letter 'z'

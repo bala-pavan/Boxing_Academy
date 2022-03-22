@@ -20,7 +20,7 @@ import com.vr_react.boxing.dto.UserDTO;
 import com.vr_react.boxing.mapper.UserMapper;
 import com.vr_react.boxing.util.Base64Check;
 import com.vr_react.boxing.util.UserUtil;
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin(origins= {"http://localhost:3000","http://localhost:3001"})
 @RestController
 @RequestMapping("/user" )
 public class UserController {
@@ -48,7 +48,7 @@ public class UserController {
 		String email = jsonObject.getString("email");
 		String password = jsonObject.getString("password").trim();
 		String confirmPassword=jsonObject.getString("confirmPassword").trim();
-		String moblieNumber = jsonObject.getString("moblieNumber");
+		String moblieNumber = jsonObject.getString("mobileNumber");
 		String sAdmin =  "NONADMIN";
 		
 		
@@ -70,7 +70,7 @@ public class UserController {
 		if (!userUtil.isProperEmail(email)) {
 			return "check with email";
 		}
-		if (password!=confirmPassword)
+		if (!password.equals(confirmPassword))
 		{
 			return "Password mismatch";
 		}
@@ -90,7 +90,7 @@ public class UserController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			//if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 		logger.info("signup method end");
 		return (temp == 1) ? "true" : "false";
@@ -129,7 +129,7 @@ public class UserController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 
 		return (isLogin == 1) ? "true" : "false";
@@ -186,7 +186,7 @@ public class UserController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			//if any error occurs
-			return e.getMessage();
+			return "false";
 		}
 		logger.info("signup method end");
 		return (temp == 1) ? "true" : "false";
