@@ -20,7 +20,7 @@ import com.vr_react.boxing.dto.UserDTO;
 import com.vr_react.boxing.mapper.UserMapper;
 import com.vr_react.boxing.util.Base64Check;
 import com.vr_react.boxing.util.UserUtil;
-@CrossOrigin(origins= {"http://localhost:3000","http://localhost:3001"})
+@CrossOrigin
 @RestController
 @RequestMapping("/user" )
 public class UserController {
@@ -75,15 +75,15 @@ public class UserController {
 			return "Password mismatch";
 		}
 		
-		//checking if string is base64 or not
-		if(!base64Check.checkForEncode(password)) {
-			//converting into base64
-			password = base64Check.encodeBase64(password);
-		}
+		// checking if string is base64 or not
+				if (!base64Check.checkForEncode(password)) {
+					// converting into base64
+					password = base64Check.encodeBase64(password);
+				}
 		try {
 			
 			//query to insert
-			String query = "insert into User(email, password, username, moblie_Number, user_Role) values (?, ?, ?, ?, ?)";
+			String query = "insert into user(email, password, username, moblie_Number, user_Role) values (?, ?, ?, ?, ?)";
 
 			//if update in sql temp will be 1
 			temp = jdbcTemplate.update(query, email, password, userName, moblieNumber, sAdmin);
@@ -115,7 +115,10 @@ public class UserController {
 		if (!userUtil.isProperEmail(loginDTO.getEmail())) {
 			return "check with email";
 		}
-
+		if (!base64Check.checkForEncode(loginDTO.getPassword())) {
+			// converting into base64
+			loginDTO.setPassword(base64Check.encodeBase64(loginDTO.getPassword()));
+		}
 		
 		String query = "select 1 from user where email = ? and password = ? and user_role = 'NONADMIN' limit 1";
 		

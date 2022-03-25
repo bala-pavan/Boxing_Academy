@@ -7,14 +7,11 @@ import BackgroundImage from '../../assets/images/admin.jpg'
 
 const App = () => {
     const [data,setData] = useState({
-        AcademyName: '',
-        EnterAcademyLocation : '',
-        Academyemail : '',
-        ContactNumber:'',
-        EnterAcademyImageUrl:'',
-        confirmEnterAcademyImageUrl:'',
+        coursename: '',
+        courseduration : '',
+        coursedescription:'',
     } )
-    const {AcademyName,EnterAcademyLocation,Academyemail,ContactNumber,EnterAcademyImageUrl,confirmEnterAcademyImageUrl} =data;
+    const {coursename,courseduration,coursedescription} =data;
     const changeHandler = e =>{
         setData({...data,[e.target.name]:e.target.value})
     }
@@ -23,18 +20,10 @@ const App = () => {
  const submitHandler = e=>{
     e.preventDefault();
   
-    if(EnterAcademyLocation.length <5){
-        alert("EnterAcademyLocation must be atleast 5 characters");
+    if(coursename.length <5){
+        alert("EnterAcademyNamw must be atleast 5 characters");
     }
-   else if(ContactNumber.length !==10){
-       alert("Contact number should be 10 digits");
-   }
-   else if (EnterAcademyImageUrl.length <8 || EnterAcademyImageUrl.length >14){
-     alert("EnterAcademyImageUrl should be minimum 8 characters long");
-   }
-    else if(EnterAcademyImageUrl !== confirmEnterAcademyImageUrl){
-        alert("EnterAcademyImageUrls are not matching");
-    }
+   
     else{
 
         console.log(JSON.stringify(data));
@@ -77,8 +66,7 @@ const App = () => {
 }
     return (
         <header style={ headerStyle }>
-            {/* {data}; */}
-         <div className="text-center">
+                     <div className="text-center">
             <Link to="/AdminAcademy">
                 <button className="primary-button">Academy</button>
             </Link>
@@ -95,17 +83,15 @@ const App = () => {
         <div className="text-center m-5-auto">
             <form onSubmit={submitHandler}>
                    <p>Enter the course Name</p>
-                   <input type="AcademyName" name="AcademyName" id="academyName" value={AcademyName} onChange={changeHandler} required /> <br />
+                   <input type="coursename" name="coursename" id="coursename" value={coursename} onChange={changeHandler} required /> <br />
                    <p>Enter the course duration</p>
-                   <input type="Academyemail" name="Academyemail" id="Academyemail" value={Academyemail} onChange={changeHandler} required /> <br />
-                   <p>Enter the course Timing</p>
-                   <input type="text" name="EnterAcademyLocation" id="EnterAcademyLocation" value={EnterAcademyLocation} onChange={changeHandler} required /> <br />
-                   <p>Enter no of students enrolled for the course</p>
-                   <input type="number" name="ContactNumber" id="ContactNumber" value={ContactNumber} onChange={changeHandler} required /> <br />
+                   <input type="courseduration" name="courseduration" id="courseduration" value={courseduration} onChange={changeHandler} required /> <br />
+                   
+                  
                    {/* <p>Enter the Academy Image Url</p> 
                    <input type="EnterAcademyImageUrl" name="EnterAcademyImageUrl" id="EnterAcademyImageUrl" value={EnterAcademyImageUrl} onChange={changeHandler} required /> <br /> */}
-                   <p>Enter the couse description</p>
-                   <input type="EnterAcademyImageUrl" name="confirmEnterAcademyImageUrl" id="confirmEnterAcademyImageUrl" value={confirmEnterAcademyImageUrl} onChange={changeHandler} required  /> <br />
+                   <p>Enter the course description</p>
+                   <input type="coursedescription" name="coursedescription" id="coursedescription" value={coursedescription} onChange={changeHandler} required  /> <br />
                    <button  onClick={()=> setAuth(true)} id="submitButton" type="submit" name="submit">AddCourse</button>
                 </form>
             </div>

@@ -32,19 +32,46 @@ const App = () => {
  const submitHandler = e=>{
     e.preventDefault();
   
-    if(EnterAcademyLocation.length <5){
-        alert("EnterAcademyLocation must be atleast 5 characters");
-    }
-   else if(ContactNumber.length !==10){
-       alert("Contact number should be 10 digits");
-   }
-   else if (EnterAcademyImageUrl.length <8 || EnterAcademyImageUrl.length >14){
-     alert("EnterAcademyImageUrl should be minimum 8 characters long");
-   }
-    else if(EnterAcademyImageUrl !== confirmEnterAcademyImageUrl){
-        alert("EnterAcademyImageUrls are not matching");
-    }
-    else{
+    
+    if(firstName.length <3){
+        alert("firstName must be 3 characters");
+      }
+      else if(lastName.length <3){
+        alert("lastName must be 3 characters");
+  
+      }
+      else if(fatherName.length <3){
+        alert("fatherName must be 3 characters");
+      }
+      else if(motherName.length <3){
+        alert("motherName must be 3 characters");
+      }
+      else if(age.length >3){
+        alert("age must be lessthan 3 characters");
+  
+      }
+      else if(phoneNumber2.length !==10){
+        alert("phoneNumber2 should be 10 digits");
+      }
+      else if(phoneNumber1.length !==10){
+        alert("phoneNumber1 should be 10 digits");
+      }
+      else if(pincode.length <6 || pincode.length >6){
+        alert("pinCode must be 6 characters");
+      }
+      else if(phoneNumber2 == phoneNumber1){
+        alert("phoneNumbers should not be same");
+      }
+      else if(streetName.length <3){
+        alert("streetName must be 3 characters");
+  
+      }
+      else if(areaName.length <3){
+        alert("areaName must be 3 characters");
+  
+      }
+  
+      else{
 
         console.log(JSON.stringify(data));
         //   let finalData = data['data'];
@@ -84,6 +111,7 @@ const App = () => {
     }
 
 }
+
     return (
         <header style={ headerStyle }>
             {/* {data}; */}
@@ -104,21 +132,23 @@ const App = () => {
         </div>
         <div className="text-center m-5-auto">
             <form onSubmit={submitHandler}>
-            <p>enter your first name</p>
+            <p>Enter First name</p>
                    <input type="text" name="firstName" id="firstName" value={firstName} onChange={changeHandler} required /> <br />
-                   <p>enter your Last name</p>
+                   <p>Enter Last name</p>
                    <input type="text" name="lastName" id="lastName" value={lastName} onChange={changeHandler} required /> <br />
-                   <p>enter your father name</p>
+                   <p>Enter Father name</p>
                    <input type="text" name="fatherName" id="fatherName" value={fatherName} onChange={changeHandler} required /> <br />
-                   <p>enter your mother name</p>
+                   <p>Enter Mother name</p>
                    <input type="text" name="motherName" id="motherName" value={motherName} onChange={changeHandler} required /> <br />
-                   <p>enter male or female</p>
+                   <p>Enter male or female</p>
                    <input type="text" name="gender" id="male/female" value={gender} onChange={changeHandler} required /> <br />
-                   <p>enter email Id</p>
+                   <p>Enter email</p>
                    <input type="email" name="email" id="email" value={email} onChange={changeHandler} required /> <br />
-                   <p>enter your age</p>
+                   {/* <input type="email" name="emailid" id="emailid" value={emailid} onChange={changeHandler} required /> <br /> */}
+                   
+                  <p>Enter age</p>
                    <input type="number" name="age" id="age" value={age} onChange={changeHandler} required /> <br />
-                   <p>enter phone number</p>
+                   <p>Enter phone number</p>
                    <input type="number" name="phoneNumber1" id="phoneNumber1" value={phoneNumber1} onChange={changeHandler} required /> <br />
                    <p>Enter Alternate phone number</p>
                    <input type="number" name="phoneNumber2" id="phoneNumber2" value={phoneNumber2} onChange={changeHandler} required /> <br />
@@ -140,7 +170,7 @@ const App = () => {
                    
                   <p>Enter Pincode</p>
                    <input type="number" name="pincode" id="pincode" value={pincode} onChange={changeHandler} required /> <br />
-                   <button  onClick={()=> setAuth(true)} id="enrollNowButton" type="submit" name="submit">Update Students</button>
+                   <button  onClick={()=> setAuth(true)} id="enrollNowButton" type="submit" name="submit">Update Student</button>
                 </form>
             </div>
             </header>

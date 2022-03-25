@@ -27,7 +27,7 @@ import com.vr_react.boxing.mapper.UserMapper;
 import com.vr_react.boxing.util.Base64Check;
 import com.vr_react.boxing.util.UserUtil;
 
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -115,7 +115,11 @@ public class AdminController {
 		if (!userUtil.isProperEmail(loginDTO.getEmail())) {
 			return "check with email";
 		}
-
+		// checking if string is base64 or not
+		if (!base64Check.checkForEncode(loginDTO.getPassword())) {
+			// converting into base64
+			loginDTO.setPassword(base64Check.encodeBase64(loginDTO.getPassword()));
+		}
 		String query = "select 1 from user where email = ? and password = ? and user_role = 'ADMIN' limit 1";
 
 		Integer isLogin = 0;
@@ -282,40 +286,40 @@ public class AdminController {
 	
 	logger.info("edit course admin method start");
 
-	JSONObject jsonObject = new JSONObject(userString);
+		logger.info("edit course admin method start");
 
-	
-	
-	int courseid = jsonObject.getInt("courseid");
-	String coursename = jsonObject.optString("coursename");
-	String coursedescription = jsonObject.optString("coursedesprition");
-	int courseduration = jsonObject.getInt("courseduration");
+		JSONObject jsonObject = new JSONObject(userString);
 
-	String change = jsonObject.getString("change");
-	
-	int temp = 0;
-	
-	String query = new String();
+		int courseid = jsonObject.getInt("courseid");
+		String coursename = jsonObject.optString("coursename");
+		String coursedescription = jsonObject.optString("coursedesprition");
+		int courseduration = jsonObject.getInt("courseduration");
 
-	try {
+		String change = jsonObject.getString("change");
 
-		if (change.equals("coursename")) {
-			query = "update course set coursename = ? where courseid = ?";
-			temp = jdbcTemplate.update(query, coursename, courseid);
-		} else if (change.equals("coursedescription")) {
-			query = "update course set coursedescription = ? where courseid = ?";
-			temp = jdbcTemplate.update(query,coursedescription, courseid);
+		int temp = 0;
+
+		String query = new String();
+
+		try {
+
+			if (change.equals("coursename")) {
+				query = "update course set coursename = ? where courseid = ?";
+				temp = jdbcTemplate.update(query, coursename, courseid);
+			} else if (change.equals("coursedescription")) {
+				query = "update course set coursedescription = ? where courseid = ?";
+				temp = jdbcTemplate.update(query, coursedescription, courseid);
+			}
+
+			// if update in sql temp will be 1
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			// if any error occurs
+			return "false";
 		}
-
-		// if update in sql temp will be 1
-
-	} catch (Exception e) {
-		logger.error(e.getMessage());
-		// if any error occurs
-		return "false";
-	}
-	logger.info("edit course admin method end");
-	return (temp == 1) ? "true" : "false";
+		logger.info("edit course admin method end");
+		return (temp == 1) ? "true" : "false";
 
 	}
 
@@ -362,15 +366,17 @@ public class AdminController {
 		String institutename = instituteDTO.getInstitutename();
 		String institutedescription = instituteDTO.getInstitutedescription();
 		String instituteaddress = instituteDTO.getInstituteaddress();
-		String moblie=instituteDTO.getMoblie();
-		String email=instituteDTO.getEmail();
-		
-		String query = "insert into institute (INSTITUTEID, EMAIL, INSTITUTEADDRESS, INSTITUTEDESCRIPTION, INSTITUTENAME, MOBLIE)  values (?, ?, ?, ?, ? , ?)";
-		
+		String moblie = instituteDTO.getMoblie();
+		String email = instituteDTO.getEmail();
+		String imageurl=instituteDTO.getImageurl();
+
+		String query = "insert into institute (INSTITUTEID, EMAIL, INSTITUTEADDRESS, INSTITUTEDESCRIPTION, INSTITUTENAME, MOBLIE,IMAGEURL)  values (?,?, ?, ?, ?, ? , ?)";
+
 		int temp = 0;
 
 		try {
-			temp = jdbcTemplate.update(query, instituteid,email, instituteaddress, institutedescription, institutename, email);
+			temp = jdbcTemplate.update(query, instituteid, email, instituteaddress, institutedescription, institutename,
+					email,imageurl);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
@@ -387,48 +393,57 @@ public class AdminController {
 	
 	logger.info("edit institute admin method start");
 
-	JSONObject jsonObject = new JSONObject(userString);
+		logger.info("edit institute admin method start");
 
-	int instituteid = jsonObject.getInt("instituteid");
-	String institutename = jsonObject.getString("institutename");
-	String institutedescription = jsonObject.getString("institutedescription");
-	String instituteaddress = jsonObject.getString("instituteaddress");
-	String moblie=jsonObject.getString("moblie");
-	String email=jsonObject.getString("email");
-	
-	String change = jsonObject.getString("change");
-	
-	int temp = 0;
-	
-	String query = new String();
+		JSONObject jsonObject = new JSONObject(userString);
 
-	try {
+		int instituteid = jsonObject.getInt("instituteid");
+		String institutename = jsonObject.getString("institutename");
+		String institutedescription = jsonObject.getString("institutedescription");
+		String instituteaddress = jsonObject.getString("instituteaddress");
+		String moblie = jsonObject.getString("moblie");
+		String email = jsonObject.getString("email");
+		String imageurl=jsonObject.getString("imageurl");
 
-		if (change.equals("institutename")) {
-			query = "update institute set institutename = ? where instituteid = ?";
-			temp = jdbcTemplate.update(query, institutename, instituteid);
-		} else if (change.equals("institutedescription")) {
-			query = "update institute set coursedescription = ? where instituteid = ?";
-			temp = jdbcTemplate.update(query,institutedescription, instituteid);
+		String change = jsonObject.getString("change");
+
+		int temp = 0;
+
+		String query = new String();
+
+		try {
+
+			if (change.equals("institutename")) {
+				query = "update institute set institutename = ? where instituteid = ?";
+				temp = jdbcTemplate.update(query, institutename, instituteid);
+			} else if (change.equals("institutedescription")) {
+				query = "update institute set coursedescription = ? where instituteid = ?";
+				temp = jdbcTemplate.update(query, institutedescription, instituteid);
+			} else if (change.equals("instituteaddress")) {
+				query = "update institute set instituteaddress = ? where instituteid = ?";
+				temp = jdbcTemplate.update(query, instituteaddress, instituteid);
+			} else if (change.equals("moblie")) {
+				query = "update institute set moblie = ? where instituteid = ?";
+				temp = jdbcTemplate.update(query, moblie, instituteid);
+			}
+			else if (change.equals("email")) {
+				query = "update institute set email = ? where instituteid = ?";
+				temp = jdbcTemplate.update(query, email, instituteid);
+			}
+			else if (change.equals("imageurl")) {
+				query = "update institute set imageurl = ? where instituteid = ?";
+				temp = jdbcTemplate.update(query, imageurl, instituteid);
+			}
+
+			// if update in sql temp will be 1
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			// if any error occurs
+			return "false";
 		}
-		else if (change.equals("instituteaddress")) {
-			query = "update institute set instituteaddress = ? where instituteid = ?";
-			temp = jdbcTemplate.update(query,instituteaddress, instituteid);
-		}
-		else if (change.equals("moblie")) {
-			query = "update institute set moblie = ? where instituteid = ?";
-			temp = jdbcTemplate.update(query,moblie, instituteid);
-		}
-
-		// if update in sql temp will be 1
-
-	} catch (Exception e) {
-		logger.error(e.getMessage());
-		// if any error occurs
-		return "false";
-	}
-	logger.info("edit course admin method end");
-	return (temp == 1) ? "true" : "false";
+		logger.info("edit course admin method end");
+		return (temp == 1) ? "true" : "false";
 
 	}
 
@@ -473,17 +488,17 @@ public class AdminController {
 		studentDTO.setStudentid(Integer.parseInt(userUtil.generateId()));
 		int studentid = studentDTO.getStudentid();
 		String studentname = studentDTO.getStudentname();
-		Date studentdob=studentDTO.getStudentdob();
+		Date studentdob = studentDTO.getStudentdob();
 		String address = studentDTO.getAddress();
-		String moblie=studentDTO.getMoblie();
-		int age=studentDTO.getAge();
-		
+		String moblie = studentDTO.getMoblie();
+		int age = studentDTO.getAge();
+
 		String query = "insert into student ( STUDENTID, ADDRESS, AGE, MOBLIE, STUDENTDOB, STUDENTNAME  )  values (?, ?, ?, ?, ? , ?)";
 		
 		int temp = 0;
 
 		try {
-			temp = jdbcTemplate.update(query, studentid, address, age, moblie,studentdob, studentname);
+			temp = jdbcTemplate.update(query, studentid, address, age, moblie, studentdob, studentname);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			// if any error occurs
@@ -500,45 +515,45 @@ public class AdminController {
 	
 	logger.info("edit institute admin method start");
 
-	JSONObject jsonObject = new JSONObject(userString);
+		logger.info("edit institute admin method start");
 
-	int studentid = jsonObject.getInt("studentid");
-	String studentname = jsonObject.getString("studentname");
-	String studentdob=jsonObject.getString("studentdob");
-	String address = jsonObject.getString("address");
-	String moblie=jsonObject.getString("moblie");
-	String email=jsonObject.getString("email");
-	
-	String change = jsonObject.getString("change");
-	
-	int temp = 0;
-	
-	String query = new String();
+		JSONObject jsonObject = new JSONObject(userString);
 
-	try {
+		int studentid = jsonObject.getInt("studentid");
+		String studentname = jsonObject.getString("studentname");
+		String studentdob = jsonObject.getString("studentdob");
+		String address = jsonObject.getString("address");
+		String moblie = jsonObject.getString("moblie");
+		String email = jsonObject.getString("email");
 
-		if (change.equals("studentname")) {
-			query = "update student set studentname = ? where studentid = ?";
-			temp = jdbcTemplate.update(query, studentname, studentid);
-		} 
-		else if (change.equals("address")) {
-			query = "update institute set instituteaddress = ? where instituteid = ?";
-			temp = jdbcTemplate.update(query,address, studentid);
+		String change = jsonObject.getString("change");
+
+		int temp = 0;
+
+		String query = new String();
+
+		try {
+
+			if (change.equals("studentname")) {
+				query = "update student set studentname = ? where studentid = ?";
+				temp = jdbcTemplate.update(query, studentname, studentid);
+			} else if (change.equals("address")) {
+				query = "update institute set instituteaddress = ? where instituteid = ?";
+				temp = jdbcTemplate.update(query, address, studentid);
+			} else if (change.equals("moblie")) {
+				query = "update student set moblie = ? where studentid = ?";
+				temp = jdbcTemplate.update(query, moblie, studentid);
+			}
+
+			// if update in sql temp will be 1
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			// if any error occurs
+			return "false";
 		}
-		else if (change.equals("moblie")) {
-			query = "update student set moblie = ? where studentid = ?";
-			temp = jdbcTemplate.update(query,moblie, studentid);
-		}
-
-		// if update in sql temp will be 1
-
-	} catch (Exception e) {
-		logger.error(e.getMessage());
-		// if any error occurs
-		return "false";
-	}
-	logger.info("edit course admin method end");
-	return (temp == 1) ? "true" : "false";
+		logger.info("edit course admin method end");
+		return (temp == 1) ? "true" : "false";
 
 	}
 

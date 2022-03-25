@@ -7,14 +7,14 @@ import BackgroundImage from '../../assets/images/admin.jpg'
 
 const App = () => {
     const [data,setData] = useState({
-        AcademyName: '',
-        EnterAcademyLocation : '',
-        Academyemail : '',
-        ContactNumber:'',
-        EnterAcademyImageUrl:'',
-        confirmEnterAcademyImageUrl:'',
+        institutename: '',
+        instituteaddress : '',
+        email : '',
+        moblie:'',
+        imageurl:'',
+        institutedescription:'',
     } )
-    const {AcademyName,EnterAcademyLocation,Academyemail,ContactNumber,EnterAcademyImageUrl,confirmEnterAcademyImageUrl} =data;
+    const {institutename,instituteaddress,email,moblie,imageurl,institutedescription} =data;
     const changeHandler = e =>{
         setData({...data,[e.target.name]:e.target.value})
     }
@@ -23,24 +23,59 @@ const App = () => {
  const submitHandler = e=>{
     e.preventDefault();
   
-    if(EnterAcademyLocation.length <5){
+    if(instituteaddress.length <5){
         alert("EnterAcademyLocation must be atleast 5 characters");
     }
-   else if(ContactNumber.length !==10){
+   else if(moblie.length !==10){
        alert("Contact number should be 10 digits");
    }
-   else if (EnterAcademyImageUrl.length <8 || EnterAcademyImageUrl.length >14){
+   else if (imageurl.length <8 || imageurl.length >14){
      alert("EnterAcademyImageUrl should be minimum 8 characters long");
    }
-    else if(EnterAcademyImageUrl !== confirmEnterAcademyImageUrl){
-        alert("EnterAcademyImageUrls are not matching");
-    }
+    // else if(EnterAcademyImageUrl !== institutedescription){
+    //     alert("EnterAcademyImageUrls are not matching");
+    // }
     else{
-          console.log(data);
-         history.push("/AdminAcademy");   
+
+        console.log(JSON.stringify(data));
+        //   let finalData = data['data'];
+        //  history.push("/user/login");       
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+        setTimeout(async () => {
+            const response = await fetch('http://localhost:8080/admin/addinstitute', requestOptions)
+
+            if (response.status >= 200 && response.status <= 299) {
+                let userData = JSON.stringify(await response.json());
+                console.log(userData);
+
+                if (userData === 'false') {
+                    alert('Data Not Inserted');
+                }
+                else if (userData === 'true') {
+                    alert('Data Inserted');
+                    //write here to clear
+                    history.push("/AdminAcademy");
+                }
+                else {
+                    alert(userData);
+                }
+            }
+            else {
+                let userData = (await response.json());
+                alert(userData);
+            }
+
+        }, 3000);
+
     }
+}
   
-  }
+  
     return (
         <header style={ headerStyle }>
             {/* {data}; */}
@@ -49,7 +84,7 @@ const App = () => {
             <Link to="/AdminAcademy">
                 <button className="primary-button">Academy</button>
             </Link>
-            <Link to="/Enrolled">
+            <Link to="/AdminCourse">
                 <button className="primary-button">Course</button>
             </Link>
             <Link to="/AdminStudentsList">
@@ -61,18 +96,18 @@ const App = () => {
         </div>
         <div className="text-center m-5-auto">
             <form onSubmit={submitHandler}>
-                   <p>Enter AcademyName</p>
-                   <input type="AcademyName" name="AcademyName" id="academyName" value={AcademyName} onChange={changeHandler} required /> <br />
-                   <p>Enter Academyemail</p>
-                   <input type="Academyemail" name="Academyemail" id="Academyemail" value={Academyemail} onChange={changeHandler} required /> <br />
-                   <p>Enter EnterAcademyLocation</p>
-                   <input type="text" name="EnterAcademyLocation" id="EnterAcademyLocation" value={EnterAcademyLocation} onChange={changeHandler} required /> <br />
-                   <p>Enter ContactNumber</p>
-                   <input type="number" name="ContactNumber" id="ContactNumber" value={ContactNumber} onChange={changeHandler} required /> <br />
-                   <p>Enter EnterAcademyImageUrl</p> 
-                   <input type="EnterAcademyImageUrl" name="EnterAcademyImageUrl" id="EnterAcademyImageUrl" value={EnterAcademyImageUrl} onChange={changeHandler} required /> <br />
-                   <p>Confirm EnterAcademyImageUrl</p>
-                   <input type="EnterAcademyImageUrl" name="confirmEnterAcademyImageUrl" id="confirmEnterAcademyImageUrl" value={confirmEnterAcademyImageUrl} onChange={changeHandler} required  /> <br />
+            <p>Enter Academy name</p>
+                   <input type="institutename" name="institutename" id="institutename" value={institutename} onChange={changeHandler} required /> <br />
+                   <p>Enter the Academy email</p>
+                   <input type="email" name="email" id="email" value={email} onChange={changeHandler} required /> <br />
+                   <p>Enter Academy Location</p>
+                   <input type="text" name="instituteaddress" id="instituteaddress" value={instituteaddress} onChange={changeHandler} required /> <br />
+                   <p>Enter the Contact Number</p>
+                   <input type="number" name="moblie" id="moblie" value={moblie} onChange={changeHandler} required /> <br />
+                   <p>Enter the Academy Image Url</p> 
+                   <input type="imageurl" name="imageurl" id="imageurl" value={imageurl} onChange={changeHandler} required /> <br />
+                   <p>Enter Academy description</p>
+                   <input type="institutedescription" name="institutedescription" id="institutedescription" value={institutedescription} onChange={changeHandler} required  /> <br />
                    <button  onClick={()=> setAuth(true)} id="submitButton" type="submit" name="submit">AddAcademy</button>
                 </form>
             </div>

@@ -13,7 +13,10 @@ body {
 .m-5-auto {
     margin: 5rem auto
 }
+.table{
+    background: rgb(127, 192, 230);
 
+}
 .primary-button {
     margin-top: 5rem;
     margin-right: 1rem;
@@ -27,6 +30,7 @@ body {
     cursor: pointer;
     text-transform: capitalize
 }
+
 .secondary-button{
         margin-top: 5rem;
         margin-right: 1rem;

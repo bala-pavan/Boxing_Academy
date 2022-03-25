@@ -71,18 +71,14 @@ const App = () => {
       alert("areaName must be 3 characters");
 
     }
-
-    
     else{
-  
+      // axios.post('',info);
+           console.log(info);
+          history.push("/Enrolled");       
+       
+     }
    
-     // axios.post('',info);
-          console.log(info);
-         history.push("/Enrolled");       
-      
-    }
-  
- }
+  }
     return (
         
         <div className="text-center m-5-auto">

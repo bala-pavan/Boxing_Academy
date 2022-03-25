@@ -16,6 +16,14 @@ public class InstituteDTO {
 	String instituteaddress;
 	String moblie;
 	String email;
+	String imageurl;
+	
+	public String getImageurl() {
+		return imageurl;
+	}
+	public void setImageurl(String imageurl) {
+		this.imageurl = imageurl;
+	}
 	public int getInstituteid() {
 		return instituteid;
 	}
